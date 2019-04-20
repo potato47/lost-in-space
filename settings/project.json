@@ -2,14 +2,16 @@
   "assets-sort-type": "name",
   "collision-matrix": [
     [
+      true,
+      true,
       true
     ],
     [
-      false,
+      true,
       false
     ],
     [
-      false,
+      true,
       false,
       false
     ],

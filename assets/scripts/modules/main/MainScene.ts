@@ -1,4 +1,6 @@
 import { Player } from './Player';
+import { BaseBlock } from './block/BaseBlock';
+import { RoadManager } from './RoadManager';
 
 const { ccclass, property } = cc._decorator;
 
@@ -9,9 +11,17 @@ export class MainScene extends cc.Component {
     player1: Player = null;
     @property(Player)
     player2: Player = null;
+    @property(RoadManager)
+    roadManager: RoadManager = null;
+
+    onLoad() {
+        cc.director.getCollisionManager().enabled = true;
+        cc.director.getCollisionManager().enabledDebugDraw = true;
+    }
 
     start() {
         this.addEventListeners();
+        this.roadManager.init(this);
         this.startGame();
     }
 
@@ -26,6 +36,11 @@ export class MainScene extends cc.Component {
 
     overGame() {
 
+    }
+
+    onRoadInit(originLeftX: number, originRightX: number) {
+        this.player1.node.parent.x = originLeftX + 220;
+        this.player2.node.parent.x = originRightX - 220;
     }
 
     onKeyDown(event: cc.Event.EventKeyboard) {
