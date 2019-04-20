@@ -16,12 +16,13 @@ export class MainScene extends cc.Component {
 
     onLoad() {
         cc.director.getCollisionManager().enabled = true;
-        cc.director.getCollisionManager().enabledDebugDraw = true;
     }
 
     start() {
         this.addEventListeners();
         this.roadManager.init(this);
+        this.player1.init();
+        this.player2.init();
         this.startGame();
     }
 
@@ -48,8 +49,14 @@ export class MainScene extends cc.Component {
             case cc.macro.KEY.space:
                 this.player1.jump();
                 break;
+            case cc.macro.KEY.a:
+                this.player1.shot();
+                break;
             case cc.macro.KEY.enter:
                 this.player2.jump();
+                break;
+            case cc.macro.KEY.l:
+                this.player2.shot();
                 break;
         }
     }

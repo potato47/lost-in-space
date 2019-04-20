@@ -14,9 +14,9 @@ export class RoadManager extends cc.Component {
     @property([cc.Prefab])
     blockPrefabs: cc.Prefab[] = [];
     @property(cc.Integer)
-    minSpace: number = 500;
+    minSpace: number = 2000;
     @property(cc.Integer)
-    maxSpace: number = 500;
+    maxSpace: number = 3000;
 
     private mainScene: MainScene = null;
     private nextBlockX: number = 0;

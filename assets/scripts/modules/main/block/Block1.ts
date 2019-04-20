@@ -24,9 +24,10 @@ export class Block1 extends BaseBlock {
     }
 
     showBlood(): void {
-        this.bloodNodes.forEach(node => {
-            node.active = true;
-        });
+        // this.bloodNodes.forEach(node => {
+        //     node.active = true;
+        // });
+        this.node.opacity = 255;
     }
 
 }
