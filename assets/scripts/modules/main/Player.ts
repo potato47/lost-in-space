@@ -48,16 +48,13 @@ export class Player extends cc.Component {
 
     restart() {
         console.log("restart");
-        let originLeftX = -this.width / 2;
-        let originRightX = this.width / 2;
         this.onEnterRun();
-        console.log(this.dir);
         if (this.dir === 1) {
-            let delta = (originRightX - 220) - this.node.x;
+            let delta = 0 - this.node.x;
             this.camera.node.x += delta;
             this.node.x += delta;               
         } else {
-            let delta = (originLeftX + 220) - this.node.x;
+            let delta = 0 - this.node.x;
             this.camera.node.x += delta;
             this.node.x += delta;         
         }
