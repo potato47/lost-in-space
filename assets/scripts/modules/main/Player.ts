@@ -19,6 +19,8 @@ export class Player extends cc.Component {
     gravity: number = 10;
     @property(cc.Camera)
     camera: cc.Camera = null;
+    @property(cc.Integer)
+    width: number = 10000;
 
     speedY: number = 0;
 
@@ -42,6 +44,23 @@ export class Player extends cc.Component {
 
     run() {
         this.fsm.setState(STATE.RUN)
+    }
+
+    restart() {
+        console.log("restart");
+        let originLeftX = -this.width / 2;
+        let originRightX = this.width / 2;
+        this.onEnterRun();
+        console.log(this.dir);
+        if (this.dir === 1) {
+            let delta = (originRightX - 220) - this.node.x;
+            this.camera.node.x += delta;
+            this.node.x += delta;               
+        } else {
+            let delta = (originLeftX + 220) - this.node.x;
+            this.camera.node.x += delta;
+            this.node.x += delta;         
+        }
     }
 
     jump() {
@@ -80,6 +99,4 @@ export class Player extends cc.Component {
             this.camera.node.x += offsetX;
         }
     }
-
-
 }

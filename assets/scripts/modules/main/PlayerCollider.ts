@@ -1,4 +1,6 @@
 import { BaseBlock } from './block/BaseBlock';
+import { MainScene } from './MainScene';
+import { Player } from './Player';
 
 const { ccclass, property } = cc._decorator;
 
@@ -9,6 +11,7 @@ export class PlayerCollider extends cc.Component {
         cc.log(other.tag);
         if (other.tag === 233) {
             other.node.parent.getComponent(BaseBlock).showBlood();
+            this.node.parent.getComponent(Player).restart();
         }
     }
 }
