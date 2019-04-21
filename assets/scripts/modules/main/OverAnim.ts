@@ -19,15 +19,15 @@ export class OverAnim extends cc.Component {
     play(isWinner1: boolean, finish: Function) {
         this.node.active = true;
         if (isWinner1) {
-            this.win1.active = true;
-            this.win2.active = false;
-            this.lose1.active = false;
-            this.lose2.active = true;
-        } else {
-            this.win1.active = false;
             this.win2.active = true;
-            this.lose1.active = true;
+            this.win1.active = false;
             this.lose2.active = false;
+            this.lose1.active = true;
+        } else {
+            this.win2.active = false;
+            this.win1.active = true;
+            this.lose2.active = true;
+            this.lose1.active = false;
         }
         this.scheduleOnce(() => {
             // this.node.active = false;
