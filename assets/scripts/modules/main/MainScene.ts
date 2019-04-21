@@ -77,6 +77,7 @@ export class MainScene extends cc.Component {
     overGame(isWinner1: boolean) {
         this.player1.stop();
         this.player2.stop();
+        this.playSecondBgm();
         this.overAnim.play(isWinner1, () => {
             cc.log('over');
         });
