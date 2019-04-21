@@ -51,6 +51,16 @@ export class MainScene extends cc.Component {
         this.playFirstBgm();
     }
 
+    player1Shot() {
+        let pos = this.player1.node.parent.convertToWorldSpaceAR(this.player1.node.position);
+        this.roadManager.shot(pos, this.player1.dir);
+    }
+    
+    player2Shot() {
+        let pos = this.player2.node.parent.convertToWorldSpaceAR(this.player2.node.position);
+        this.roadManager.shot(pos, this.player2.dir);
+    }
+
     speak(worldPos: cc.Vec2, dir) {
 
     }
@@ -64,10 +74,10 @@ export class MainScene extends cc.Component {
         cc.audioEngine.play(this.audioClip1, true, 1);
     }
 
-    overGame() {
+    overGame(isWinner1: boolean) {
         this.player1.stop();
         this.player2.stop();
-        this.overAnim.play(() => {
+        this.overAnim.play(isWinner1, () => {
             cc.log('over');
         });
     }
@@ -83,13 +93,13 @@ export class MainScene extends cc.Component {
                 this.player1.jump();
                 break;
             case cc.macro.KEY.a:
-                this.player1.shot();
+                this.player1Shot();
                 break;
             case cc.macro.KEY.enter:
                 this.player2.jump();
                 break;
             case cc.macro.KEY.l:
-                this.player2.shot();
+                this.player2Shot();
                 break;
         }
     }

@@ -1,0 +1,32 @@
+{
+  "ver": "2.3.0",
+  "uuid": "7ecaf7bd-98a9-40e5-8122-f454744380a4",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "platformSettings": {},
+  "subMetas": {
+    "方形键帽胜利": {
+      "ver": "1.0.4",
+      "uuid": "b40a1428-9ebb-4017-9785-593d7ae47330",
+      "rawTextureUuid": "7ecaf7bd-98a9-40e5-8122-f454744380a4",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 206,
+      "height": 142,
+      "rawWidth": 206,
+      "rawHeight": 142,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import { BaseBlock } from './block/BaseBlock';
 import { MainScene } from './MainScene';
 import { MathHelper } from '../../utils/MathHelper';
+import { Wave } from './Wave';
 
 const { ccclass, property } = cc._decorator;
 
@@ -17,7 +18,10 @@ export class RoadManager extends cc.Component {
     minSpace: number = 2000;
     @property(cc.Integer)
     maxSpace: number = 3000;
+    @property(cc.Prefab)
+    wavePrefab: cc.Prefab = null;
 
+    wavePool: cc.NodePool;
     private mainScene: MainScene = null;
     private nextBlockX: number = 0;
 
@@ -25,6 +29,7 @@ export class RoadManager extends cc.Component {
         this.mainScene = mainScene;
         this.bg.width = this.width;
         this.initBlocks();
+        this.initWavePool();
         this.mainScene.onRoadInit(-this.width / 2, this.width / 2);
     }
 
@@ -37,6 +42,38 @@ export class RoadManager extends cc.Component {
         let right = this.width / 2 - 1000
         while (this.nextBlockX < right) {
             this.addBlock();
+        }
+    }
+
+    initWavePool() {
+        this.wavePool = new cc.NodePool();
+        for (let i = 0; i < 8; i++) {
+            this.wavePool.put(cc.instantiate(this.wavePrefab));
+        }
+    }
+
+    createWaveNode(dir: number) {
+        let node: cc.Node = null;
+        if (this.wavePool.size() > 0) {
+            node = this.wavePool.get();
+        } else {
+            node = cc.instantiate(this.wavePrefab);
+        }
+        node.position = cc.v2(0, 0);
+        node.scaleX = dir;
+        return node;
+    }
+
+    onWaveNodeRecycle(node: cc.Node) {
+        this.wavePool.put(node);
+    }
+
+    shot(worldPos: cc.Vec2, dir: number) {
+        for (let i = 0; i < 5; i++) {
+            let waveNode = this.createWaveNode(dir);
+            this.node.addChild(waveNode);
+            waveNode.position = this.node.convertToNodeSpaceAR(worldPos);
+            waveNode.getComponent(Wave).shot(dir, this.onWaveNodeRecycle.bind(this));
         }
     }
 
