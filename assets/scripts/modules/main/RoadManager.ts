@@ -33,7 +33,7 @@ export class RoadManager extends cc.Component {
     }
 
     initBlocks() {
-        this.nextBlockX = -this.width / 2 + 1000;
+        this.nextBlockX = 1000;
         let right = this.width / 2 - 1000
         while (this.nextBlockX < right) {
             this.addBlock();
@@ -42,11 +42,16 @@ export class RoadManager extends cc.Component {
 
     addBlock() {
         let i = Math.random() * this.blockPrefabs.length | 0;
-        let blockNode = cc.instantiate(this.blockPrefabs[i]);
-        blockNode.position = cc.v2(this.nextBlockX, 0);
-        this.bg.addChild(blockNode);
-        blockNode.getComponent(BaseBlock).init();
-        this.nextBlockX += blockNode.getComponent(BaseBlock).width + this.getRandomSpace();
+        let blockNode1 = cc.instantiate(this.blockPrefabs[i]);
+        blockNode1.position = cc.v2(this.nextBlockX, 0);
+        this.bg.addChild(blockNode1);
+        blockNode1.getComponent(BaseBlock).init();
+        // 对称添加障碍物
+        let blockNode2 = cc.instantiate(this.blockPrefabs[i]);
+        blockNode2.position = cc.v2(-this.nextBlockX, 0);
+        this.bg.addChild(blockNode2);
+        blockNode2.getComponent(BaseBlock).init();
+        this.nextBlockX += blockNode1.getComponent(BaseBlock).width + this.getRandomSpace();
     }
 
     getRandomSpace() {

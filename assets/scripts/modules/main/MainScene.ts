@@ -1,6 +1,7 @@
 import { Player } from './Player';
-import { BaseBlock } from './block/BaseBlock';
 import { RoadManager } from './RoadManager';
+import { StartAnim } from './StartAnim';
+import { OverAnim } from './OverAnim';
 
 const { ccclass, property } = cc._decorator;
 
@@ -13,6 +14,18 @@ export class MainScene extends cc.Component {
     player2: Player = null;
     @property(RoadManager)
     roadManager: RoadManager = null;
+    @property({
+        type: cc.AudioClip
+    })
+    audioClip1: cc.AudioClip = null;
+    @property({
+        type: cc.AudioClip
+    })
+    audioClip2: cc.AudioClip = null;
+    @property(StartAnim)
+    startAnim: StartAnim = null;
+    @property(OverAnim)
+    overAnim: OverAnim = null;
 
     onLoad() {
         cc.director.getCollisionManager().enabled = true;
@@ -21,9 +34,11 @@ export class MainScene extends cc.Component {
     start() {
         this.addEventListeners();
         this.roadManager.init(this);
-        this.player1.init(this.roadManager.getHalfDistance());
-        this.player2.init(this.roadManager.getHalfDistance());
-        this.startGame();
+        this.player1.init(this, this.roadManager.getHalfDistance());
+        this.player2.init(this, this.roadManager.getHalfDistance());
+        this.startAnim.play(() => {
+            this.startGame();
+        });
     }
 
     onDisable() {
@@ -33,10 +48,28 @@ export class MainScene extends cc.Component {
     startGame() {
         this.player1.run();
         this.player2.run();
+        this.playFirstBgm();
+    }
+
+    speak(worldPos: cc.Vec2, dir) {
+
+    }
+
+    playSecondBgm() {
+        cc.audioEngine.play(this.audioClip2, true, 1);
+
+    }
+
+    playFirstBgm() {
+        cc.audioEngine.play(this.audioClip1, true, 1);
     }
 
     overGame() {
-
+        this.player1.stop();
+        this.player2.stop();
+        this.overAnim.play(() => {
+            cc.log('over');
+        });
     }
 
     onRoadInit(originLeftX: number, originRightX: number) {

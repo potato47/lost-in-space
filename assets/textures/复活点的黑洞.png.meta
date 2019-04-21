@@ -1,0 +1,32 @@
+{
+  "ver": "2.3.0",
+  "uuid": "5fe502ff-011e-4e66-ab5a-8a022d156054",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "platformSettings": {},
+  "subMetas": {
+    "复活点的黑洞": {
+      "ver": "1.0.4",
+      "uuid": "ab18b35a-fc4e-4c26-ab55-5381469b140f",
+      "rawTextureUuid": "5fe502ff-011e-4e66-ab5a-8a022d156054",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 55,
+      "height": 55,
+      "rawWidth": 55,
+      "rawHeight": 55,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

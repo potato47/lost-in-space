@@ -1,4 +1,5 @@
 import { NextFSM } from '../../libs/NextFSM';
+import { MainScene } from './MainScene';
 
 const { ccclass, property } = cc._decorator;
 
@@ -36,36 +37,39 @@ export class Player extends cc.Component {
     dashOrigin: cc.Vec2 = cc.Vec2.ZERO;
     wavePool: cc.NodePool;
     totalDistance: number = 0;
+    isReturn = false;
+    mainScene: MainScene = null;
 
     private fsm: NextFSM = new NextFSM({
         [STATE.NONE]: {
             to: [STATE.RUN]
         },
         [STATE.RUN]: {
-            to: [STATE.JUMP, STATE.DIE],
+            to: [STATE.JUMP, STATE.DIE, STATE.NONE],
             enter: this.onEnterRun
         },
         [STATE.JUMP]: {
-            to: [STATE.DASH, STATE.RUN, STATE.DIE],
+            to: [STATE.DASH, STATE.RUN, STATE.DIE, STATE.NONE],
             enter: this.onEnterJump
         },
         [STATE.DASH]: {
-            to: [STATE.DROP, STATE.DIE],
+            to: [STATE.DROP, STATE.DIE, STATE.NONE],
             enter: this.onEnterDash,
             exit: this.onExitDash
         },
         [STATE.DROP]: {
-            to: [STATE.NONE, STATE.RUN, STATE.DIE],
+            to: [STATE.NONE, STATE.RUN, STATE.DIE, STATE.NONE],
             enter: this.onEnterDrop
         },
         [STATE.DIE]: {
-            to: [STATE.RUN],
+            to: [STATE.RUN, STATE.NONE],
             enter: this.onEnterDie,
             exit: this.onExitDie
         }
     }, STATE.NONE, this);
 
-    init(totalDistance: number) {
+    init(mainScene: MainScene, totalDistance: number) {
+        this.mainScene = mainScene;
         this.totalDistance = totalDistance;
         this.initWavePool();
     }
@@ -89,6 +93,10 @@ export class Player extends cc.Component {
         return node;
     }
 
+    stop() {
+        this.fsm.setState(STATE.NONE);
+    }
+
     run() {
         this.fsm.setState(STATE.RUN)
     }
@@ -106,8 +114,8 @@ export class Player extends cc.Component {
     }
 
     shot() {
-        let shotAction = cc.moveBy(2, 2000 * this.dir, 0);
-        for (let i = 0; i < 5; i++) {
+        let shotAction = cc.moveBy(5, 1500 * this.dir, 0);
+        for (let i = 0; i < 1; i++) {
             let waveNode = this.createWaveNode();
             this.node.addChild(waveNode);
             // waveNode.position = this.node.position;
@@ -117,20 +125,38 @@ export class Player extends cc.Component {
         }
     }
 
+    return() {
+        this.mainScene.playSecondBgm();
+        this.isReturn = true;
+        this.node.scaleX *= -1;
+        this.camera.node.x -= this.dir * 840;
+        this.dir *= -1;
+    }
+
+    forward() {
+        this.isReturn = false;
+        this.node.scale *= -1;
+        this.camera.node.x -= this.dir * 840;
+        this.dir *= -1;
+    }
+
     onWaveNodeRecycle(node: cc.Node) {
         this.wavePool.put(node);
     }
 
     relive() {
         console.log("restart");
+        if (this.isReturn) {
+            this.forward();
+        }
         if (this.dir === 1) {
             let delta = 0 - this.node.x;
             this.camera.node.x += delta;
-            this.node.x += delta;               
+            this.node.x += delta;
         } else {
             let delta = 0 - this.node.x;
             this.camera.node.x += delta;
-            this.node.x += delta;         
+            this.node.x += delta;
         }
         this.fsm.setState(STATE.RUN)
     }
@@ -156,12 +182,14 @@ export class Player extends cc.Component {
     onEnterDash() {
         this.speedX *= 5;
         this.dashOrigin = this.node.position;
+        this.node.angle = -90 * this.dir;
         this.showStreak();
     }
 
     onExitDash() {
         this.speedX /= 5;
         this.hideStreak();
+        this.node.angle = 0;
     }
 
     onEnterDrop() {
@@ -178,7 +206,11 @@ export class Player extends cc.Component {
     }
 
     updateProgress() {
-        this.progressLabel.string = Math.round(Math.abs(this.node.x) / this.totalDistance * 100) + '%';
+        let progress = Math.round((Math.abs(this.node.x) + 420) / this.totalDistance * 100)
+        this.progressLabel.string = progress + '%';
+        if (progress >= 100) {
+            this.mainScene.overGame();
+        }
     }
 
     update(dt: number) {
@@ -190,12 +222,13 @@ export class Player extends cc.Component {
                 if (this.node.y <= 0) {
                     this.fsm.setState(STATE.RUN);
                 }
-            } else if(state === STATE.DASH) {
+            } else if (state === STATE.DASH) {
                 if ((this.node.x - this.dashOrigin.x) * this.dir >= this.dashLength) {
                     this.fsm.setState(STATE.DROP);
                 }
             }
-            let offsetX = this.speedX * dt * this.dir
+
+            let offsetX = this.speedX * dt * this.dir;
             this.node.x += offsetX;
             this.camera.node.x += offsetX;
             this.updateProgress();
