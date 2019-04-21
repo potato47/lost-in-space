@@ -60,7 +60,8 @@ export class Player extends cc.Component {
         },
         [STATE.DIE]: {
             to: [STATE.RUN],
-            enter: this.onEnterDie
+            enter: this.onEnterDie,
+            exit: this.onExitDie
         }
     }, STATE.NONE, this);
 
@@ -168,7 +169,12 @@ export class Player extends cc.Component {
     }
 
     onEnterDie() {
+        this.node.x += 100 * this.dir;
         this.animation.play('die');
+    }
+
+    onExitDie() {
+        this.node.x -= 100 * this.dir;
     }
 
     updateProgress() {
