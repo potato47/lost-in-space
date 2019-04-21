@@ -21,8 +21,8 @@ export class MainScene extends cc.Component {
     start() {
         this.addEventListeners();
         this.roadManager.init(this);
-        this.player1.init();
-        this.player2.init();
+        this.player1.init(this.roadManager.getHalfDistance());
+        this.player2.init(this.roadManager.getHalfDistance());
         this.startGame();
     }
 

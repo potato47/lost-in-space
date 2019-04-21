@@ -28,6 +28,10 @@ export class RoadManager extends cc.Component {
         this.mainScene.onRoadInit(-this.width / 2, this.width / 2);
     }
 
+    getHalfDistance() {
+        return this.width / 2;
+    }
+
     initBlocks() {
         this.nextBlockX = -this.width / 2 + 1000;
         let right = this.width / 2 - 1000

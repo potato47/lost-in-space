@@ -16,6 +16,8 @@ export class Block1 extends BaseBlock {
     offsetScaleMax: number = 1.0;
     @property([cc.Node])
     bloodNodes: Array<cc.Node> = []
+    @property(cc.Node)
+    hintNode: cc.Node = null;
     
     init(): void {
         let offsetScale = MathHelper.GetRandomIntegerInRange(this.offsetScaleMin * 10, this.offsetScaleMax * 10) / 10;
@@ -27,7 +29,7 @@ export class Block1 extends BaseBlock {
         // this.bloodNodes.forEach(node => {
         //     node.active = true;
         // });
-        this.node.opacity = 255;
+        this.hintNode.active = false;
     }
 
 }

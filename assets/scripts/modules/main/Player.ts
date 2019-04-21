@@ -29,10 +29,13 @@ export class Player extends cc.Component {
     streakNode: cc.Node = null;
     @property(cc.Prefab)
     wavePrefab: cc.Prefab = null;
+    @property(cc.Label)
+    progressLabel: cc.Label = null;
 
     speedY: number = 0;
     dashOrigin: cc.Vec2 = cc.Vec2.ZERO;
     wavePool: cc.NodePool;
+    totalDistance: number = 0;
 
     private fsm: NextFSM = new NextFSM({
         [STATE.NONE]: {
@@ -61,7 +64,8 @@ export class Player extends cc.Component {
         }
     }, STATE.NONE, this);
 
-    init() {
+    init(totalDistance: number) {
+        this.totalDistance = totalDistance;
         this.initWavePool();
     }
 
@@ -167,6 +171,10 @@ export class Player extends cc.Component {
         this.animation.play('die');
     }
 
+    updateProgress() {
+        this.progressLabel.string = Math.round(Math.abs(this.node.x) / this.totalDistance * 100) + '%';
+    }
+
     update(dt: number) {
         let state = this.fsm.getState();
         if (state !== STATE.NONE && state !== STATE.DIE) {
@@ -184,6 +192,7 @@ export class Player extends cc.Component {
             let offsetX = this.speedX * dt * this.dir
             this.node.x += offsetX;
             this.camera.node.x += offsetX;
+            this.updateProgress();
         }
     }
 }
